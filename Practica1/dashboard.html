@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Sensor DHT11</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background-color: #f7f7f7;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Sensor DHT11</h1>
+        <div class="card">
+            <h2>Temperatura</h2>
+            <p id="temp">Cargando...</p>
+        </div>
+        <div class="card">
+            <h2>Humedad</h2>
+            <p id="hum">Cargando...</p>
+        </div>
+    </div>
+
+    <script>
+        function fetchData() {
+            fetch('/latest-data')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('temp').innerText = data.temperatura !== null ? data.temperatura + " °C" : "No disponible";
+                    document.getElementById('hum').innerText = data.humedad !== null ? data.humedad + " %" : "No disponible";
+                })
+                .catch(error => console.log("Error fetching data: ", error));
+        }
+
+        // Actualizar los datos cada 5 segundos
+        setInterval(fetchData, 5000);
+
+        // Llamar a fetchData al cargar la página
+        fetchData();
+    </script>
+</body>
+</html>
